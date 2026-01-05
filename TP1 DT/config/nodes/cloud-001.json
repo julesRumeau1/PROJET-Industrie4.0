@@ -1,9 +1,0 @@
-{
-    "id": "cloud-001",
-    "level": 3,
-    "port": 5000,
-    "parents": [],
-    "processing": {
-        "pipeline": ["validator", "cleaner", "aggregator", "synthesizer"]
-    }
-}

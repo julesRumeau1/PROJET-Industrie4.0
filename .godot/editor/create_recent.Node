@@ -1,10 +1,11 @@
+Node3D
+OmniLight3D
+SpotLight3D
 CollisionShape3D
 StaticBody3D
 TextEdit
 LineEdit
 Button
-Node3D
 WorldEnvironment
 Camera3D
 Timer
-SpotLight3D

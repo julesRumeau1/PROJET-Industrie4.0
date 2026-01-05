@@ -1,9 +1,0 @@
-{
-    "id": "edge-building-a",
-    "level": 2,
-    "port": 5001,
-    "parents": [{"host": "127.0.0.1", "port": 5000}],
-    "processing": {
-        "pipeline": ["validator", "cleaner", "aggregator"]
-    }
-}

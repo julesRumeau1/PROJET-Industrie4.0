@@ -1,3 +1,4 @@
 res://node_3d.tscn
-res://tutu.gd
-res://led.gd
+res://old_heater.gd
+res://fenetregauche.gd
+res://fenetredroite.gd
