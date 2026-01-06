@@ -9,7 +9,7 @@ var target_angle := -90.0
 
 
 # --- MQTT ---
-@export var mqtt_topic := "home/window/state"
+@export var mqtt_topic := "home/appart/state"
 var MQTT_instance: Node = null
 
 func _ready():
@@ -37,25 +37,27 @@ func _on_mqtt_message(topic, message):
 
 	var msg = message.to_lower()
 	print('message: ')
-	print(msg)
+	#print(msg)
+	#var parsed_msg = JSON.parse_string(msg)
+	
 	# --- OUVRIR ---
-	if msg == "open" or msg == "1":
-		if not is_open:
-			open()
-			print("🪟 Fenêtre ouverte")
-		else:
-			print("🪟 Fenêtre déjà ouverte")
+	#if parsed_msg['window'] == 0:
+	#	if not is_open:
+	#		open()
+	#		print("🪟 Fenêtre ouverte")
+	#	else:
+	#		print("🪟 Fenêtre déjà ouverte")
 
 	# --- FERMER ---
-	elif msg == "close" or msg == "0":
-		if is_open:
-			close()
-			print("🪟 Fenêtre fermée")
-		else:
-			print("🪟 Fenêtre déjà fermée")
+	#elif parsed_msg['window'] == 1:
+	#	if is_open:
+	#		close()
+	#		print("🪟 Fenêtre fermée")
+	#	else:
+	#		print("🪟 Fenêtre déjà fermée")
 
-	else:
-		print("Message MQTT invalide :", message)
+	#else:
+	#	print("Message MQTT invalide :", message)
 
 # --- Actions fenêtre ---
 func open():
@@ -67,9 +69,16 @@ func close():
 	target_angle = -90.0
 
 func _process(delta):
-	print(target_angle)
 	rotation_degrees.y = lerp(
 		rotation_degrees.y,
 		target_angle,
 		delta * speed
 	)
+
+
+func _on_static_body_3d_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if (is_open):
+			close()
+		else:
+			open()

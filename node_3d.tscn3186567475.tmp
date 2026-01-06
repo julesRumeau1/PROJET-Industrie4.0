@@ -1,0 +1,78 @@
+[gd_scene load_steps=14 format=3 uid="uid://bimqwtpqswnd2"]
+
+[ext_resource type="PackedScene" uid="uid://b56egfb0dtupn" path="res://piece.blend" id="1_a202f"]
+[ext_resource type="PackedScene" uid="uid://cngbwmn617gv3" path="res://fenetre.blend" id="2_noarx"]
+[ext_resource type="PackedScene" uid="uid://dsl3dg48oe7nh" path="res://old-heater.blend" id="3_r3fl7"]
+[ext_resource type="Script" uid="uid://ojl6q1sm51dh" path="res://old_heater.gd" id="4_jka67"]
+[ext_resource type="Script" uid="uid://drlsde1ecj151" path="res://fenetredroite.gd" id="5_i5arm"]
+[ext_resource type="Script" uid="uid://dsodvwgb8j8li" path="res://fenetregauche.gd" id="5_jka67"]
+[ext_resource type="PackedScene" uid="uid://b5aap8rkutu1v" path="res://tanker-desk.blend" id="7_wc5p8"]
+[ext_resource type="PackedScene" uid="uid://diivgvphisxfw" path="res://low-poly-single-bed.blend" id="8_jsk3o"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_a202f"]
+
+[sub_resource type="Sky" id="Sky_noarx"]
+sky_material = SubResource("ProceduralSkyMaterial_a202f")
+
+[sub_resource type="Environment" id="Environment_a0tk4"]
+background_mode = 2
+background_energy_multiplier = 4.0
+sky = SubResource("Sky_noarx")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jsk3o"]
+size = Vector3(2.1062012, 7.600586, 7.2703857)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4arys"]
+size = Vector3(3.6035843, 1.8165588, 1)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.04140518, 0.6608415, -0.7493825, -0.024778284, 0.7491158, 0.6619755, 0.9988352, 0.045977622, -0.0146427555, 2.6716585, 6.403448, 3.9800968)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_a0tk4")
+
+[node name="piece" parent="." instance=ExtResource("1_a202f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.960631, 0, 4.1544647)
+
+[node name="old-heater" parent="." instance=ExtResource("3_r3fl7")]
+transform = Transform3D(-1.3113418e-08, 0, -0.30000004, 0, 0.29999998, 0, 0.30000004, 0, -1.3113418e-08, 9.424698, 0, -0.41763496)
+script = ExtResource("4_jka67")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="old-heater"]
+transform = Transform3D(3.3333333, 0, 0, 0, 3.3333335, 0, 0, 0, 3.3333333, -0.41386944, 4.9171276, 0)
+light_color = Color(1, 0, 0, 1)
+light_energy = 13.476
+
+[node name="StaticBody3D" type="StaticBody3D" parent="old-heater"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="old-heater/StaticBody3D"]
+transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, -0.0001219511, 3.3002927, -0.0264225)
+shape = SubResource("BoxShape3D_jsk3o")
+
+[node name="fenetre" type="Node3D" parent="."]
+
+[node name="fenetredroite" parent="fenetre" instance=ExtResource("2_noarx")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 15.953, 3, 6.1390247)
+script = ExtResource("5_i5arm")
+
+[node name="fenetregauche" parent="fenetre" instance=ExtResource("2_noarx")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 15.951284, 3, 2.1444132)
+script = ExtResource("5_jka67")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="fenetre/fenetregauche"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="fenetre/fenetregauche/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0899773, 0.049209595, 0)
+shape = SubResource("BoxShape3D_4arys")
+
+[node name="tanker-desk" parent="." instance=ExtResource("7_wc5p8")]
+transform = Transform3D(-5.6824803e-08, 0, -1.3, 0, 1.3, 0, 1.3, 0, -5.6824803e-08, 22.177967, 2.6913023, -25.222418)
+
+[node name="low-poly-single-bed" parent="." instance=ExtResource("8_jsk3o")]
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 10.510395, -0.009379983, 8.070839)
+
+[connection signal="input_event" from="old-heater/StaticBody3D" to="old-heater" method="_on_static_body_3d_input_event"]
+[connection signal="input_event" from="fenetre/fenetregauche/StaticBody3D" to="fenetre/fenetredroite" method="_on_static_body_3d_input_event"]
+[connection signal="input_event" from="fenetre/fenetregauche/StaticBody3D" to="fenetre/fenetregauche" method="_on_static_body_3d_input_event"]

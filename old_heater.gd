@@ -2,14 +2,14 @@ extends Node3D
 
 # --- Variables exportées ---
 @export var light_node : OmniLight3D  # Référence à la lumière du radiateur
-@export var mqtt_topic := "home/radiator/light"  # Topic MQTT à écouter
+@export var mqtt_topic := "home/appart/cmd"  # Topic MQTT à écouter
 
 # --- Etat de la lumière ---
 var is_on := true
 
 # --- MQTT ---
 var MQTT_instance: Node = null
-
+var mqtt_connected := false
 func _ready():
 	# Récupérer la lumière si non assignée
 	if not light_node:
@@ -33,7 +33,8 @@ func _ready():
 
 # --- Signaux MQTT ---
 func _on_mqtt_connected():
-	print("✅ Connecté au broker MQTT")
+	print("✅ Heater Connecté au broker MQTT")
+	mqtt_connected = true
 	MQTT_instance.subscribe(mqtt_topic)
 	print("Souscrit au topic:", mqtt_topic)
 
@@ -65,3 +66,13 @@ func toggle_heater():
 	is_on = !is_on
 	if light_node:
 		light_node.visible = is_on
+	if MQTT_instance == null or not mqtt_connected:
+		return
+	var payload = JSON.stringify({"heater": is_on})
+	MQTT_instance.publish(mqtt_topic, payload, true)
+	print("📤 MQTT state:", payload)
+
+
+func _on_static_body_3d_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		toggle_heater()

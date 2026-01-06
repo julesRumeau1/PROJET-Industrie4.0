@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bimqwtpqswnd2"]
+[gd_scene load_steps=14 format=3 uid="uid://bimqwtpqswnd2"]
 
 [ext_resource type="PackedScene" uid="uid://b56egfb0dtupn" path="res://piece.blend" id="1_a202f"]
 [ext_resource type="PackedScene" uid="uid://cngbwmn617gv3" path="res://fenetre.blend" id="2_noarx"]
@@ -18,6 +18,12 @@ sky_material = SubResource("ProceduralSkyMaterial_a202f")
 background_mode = 2
 background_energy_multiplier = 4.0
 sky = SubResource("Sky_noarx")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jsk3o"]
+size = Vector3(2.1062012, 7.600586, 7.2703857)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4arys"]
+size = Vector3(3.6035843, 1.8165588, 1)
 
 [node name="Node3D" type="Node3D"]
 
@@ -39,6 +45,12 @@ transform = Transform3D(3.3333333, 0, 0, 0, 3.3333335, 0, 0, 0, 3.3333333, -0.41
 light_color = Color(1, 0, 0, 1)
 light_energy = 13.476
 
+[node name="StaticBody3D" type="StaticBody3D" parent="old-heater"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="old-heater/StaticBody3D"]
+transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, -0.0001219511, 3.3002927, -0.0264225)
+shape = SubResource("BoxShape3D_jsk3o")
+
 [node name="fenetre" type="Node3D" parent="."]
 
 [node name="fenetredroite" parent="fenetre" instance=ExtResource("2_noarx")]
@@ -49,8 +61,18 @@ script = ExtResource("5_i5arm")
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 15.951284, 3, 2.1444132)
 script = ExtResource("5_jka67")
 
+[node name="StaticBody3D" type="StaticBody3D" parent="fenetre/fenetregauche"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="fenetre/fenetregauche/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0899773, 0.049209595, 0)
+shape = SubResource("BoxShape3D_4arys")
+
 [node name="tanker-desk" parent="." instance=ExtResource("7_wc5p8")]
 transform = Transform3D(-5.6824803e-08, 0, -1.3, 0, 1.3, 0, 1.3, 0, -5.6824803e-08, 22.177967, 2.6913023, -25.222418)
 
 [node name="low-poly-single-bed" parent="." instance=ExtResource("8_jsk3o")]
 transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 10.510395, -0.009379983, 8.070839)
+
+[connection signal="input_event" from="old-heater/StaticBody3D" to="old-heater" method="_on_static_body_3d_input_event"]
+[connection signal="input_event" from="fenetre/fenetregauche/StaticBody3D" to="fenetre/fenetredroite" method="_on_static_body_3d_input_event"]
+[connection signal="input_event" from="fenetre/fenetregauche/StaticBody3D" to="fenetre/fenetregauche" method="_on_static_body_3d_input_event"]
