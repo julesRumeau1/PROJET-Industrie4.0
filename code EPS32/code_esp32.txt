@@ -1,0 +1,167 @@
+#include <WiFi.h>
+#include <PubSubClient.h>
+#include <ArduinoJson.h>
+#include <ESP32Servo.h>
+#include <Wire.h>
+#include <Adafruit_BME280.h>
+
+// ===== CONFIG =====
+#define LED_R 3
+#define LED_G 4
+#define LED_B 5
+#define SERVO_PIN 2
+#define SERVO_OPEN 180
+#define SERVO_CLOSE 0
+#define SDA_PIN 18
+#define SCL_PIN 19
+#define SENSOR_INTERVAL 10000  // 10 secondes
+
+const char* ssid = "OnePlus NordCE 5G";
+const char* password = "caca1234";
+const char* mqtt_server = "test.mosquitto.org";
+const char* TOPIC_CMD   = "home/appart/cmd";
+const char* TOPIC_STATE = "home/appart/state";
+
+// ===== OBJECTS =====
+WiFiClient espClient;
+PubSubClient client(espClient);
+Servo servo;
+Adafruit_BME280 bme;
+
+// ===== STATES =====
+bool heaterState = false;
+bool windowState = false;
+bool lastWindowState = false;
+bool mqttUpdated = false;
+float temperature = 0.0;
+unsigned long lastSensorSend = 0;
+StaticJsonDocument<256> mqttDoc;
+
+// ===== WIFI =====
+void setupWiFi() {
+  WiFi.begin(ssid, password);
+  Serial.print("Connexion WiFi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("\nWiFi connecté");
+}
+
+// ===== MQTT =====
+void mqttCallback(char* topic, byte* payload, unsigned int length) {
+  if (deserializeJson(mqttDoc, payload, length) == DeserializationError::Ok) {
+    mqttUpdated = true;
+  }
+}
+
+void mqttReconnect() {
+  if (client.connected()) return;
+
+  while (!client.connected()) {
+    String id = "ESP32-" + String(random(0xffff), HEX);
+    if (client.connect(id.c_str())) {
+      client.subscribe(TOPIC_CMD);
+      Serial.println("MQTT connecté");
+    } else {
+      Serial.print("Erreur MQTT rc=");
+      Serial.println(client.state());
+      delay(2000);
+    }
+  }
+}
+
+// ===== MQTT LOGIC =====
+void listenMqtt() {
+  if (!mqttUpdated) return;
+
+  if (mqttDoc.containsKey("heater")) heaterState = mqttDoc["heater"];
+  if (mqttDoc.containsKey("window")) windowState = mqttDoc["window"];
+
+  mqttUpdated = false;
+}
+
+// ===== LED (HEATER) =====
+void updateLED() {
+  digitalWrite(LED_R, heaterState ? HIGH : LOW);
+  digitalWrite(LED_G, heaterState ? LOW : HIGH);
+  digitalWrite(LED_B, LOW);
+}
+
+// ===== SERVO (WINDOW) =====
+void updateServo() {
+  if (windowState != lastWindowState) {
+    servo.write(windowState ? SERVO_OPEN : SERVO_CLOSE);
+    Serial.println(windowState ? "Fenêtre OUVERTE" : "Fenêtre FERMÉE");
+    lastWindowState = windowState;
+  }
+}
+
+// ===== TEMPERATURE =====
+void readTemperature() {
+  float temp = bme.readTemperature();
+  if (!isnan(temp)) temperature = temp;
+  Serial.print("Température = ");
+  Serial.print(temperature);
+  Serial.println(" °C");
+}
+
+// ===== PUBLISH STATE =====
+void publishState() {
+  if (!client.connected()) return;  // sécurité
+  StaticJsonDocument<256> doc;
+  doc["heater"] = heaterState ? 1 : 0;
+  doc["window"] = windowState ? 1 : 0;
+  doc["temperature"] = temperature;
+
+  char buffer[128];
+  serializeJson(doc, buffer);
+  client.publish(TOPIC_STATE, buffer);
+  Serial.print("MQTT state envoyé : ");
+  Serial.println(buffer);
+}
+
+// ===== SETUP =====
+void setup() {
+  Serial.begin(115200);
+  Serial.println("ESP32 - Heater LED + Window Servo + BME280");
+
+  pinMode(LED_R, OUTPUT);
+  pinMode(LED_G, OUTPUT);
+  pinMode(LED_B, OUTPUT);
+
+  servo.attach(SERVO_PIN);
+  servo.write(SERVO_CLOSE);
+
+  Wire.begin(SDA_PIN, SCL_PIN);
+
+  if (!bme.begin(0x76)) {
+    Serial.println("BME280 pas trouvé en 0x76, test 0x77...");
+    if (!bme.begin(0x77)) Serial.println("❌ BME280 introuvable");
+    else Serial.println("✅ BME280 trouvé en 0x77");
+  } else {
+    Serial.println("✅ BME280 trouvé en 0x76");
+  }
+
+  setupWiFi();
+  client.setServer(mqtt_server, 1883);
+  client.setCallback(mqttCallback);
+}
+
+// ===== LOOP =====
+void loop() {
+  if (!client.connected()) mqttReconnect();
+  client.loop();
+
+  listenMqtt();
+  updateLED();
+  updateServo();
+
+  // envoyer la température toutes les 10 sec
+  unsigned long now = millis();
+  if (now - lastSensorSend >= SENSOR_INTERVAL) {
+    lastSensorSend = now;
+    readTemperature();
+    publishState();
+  }
+}
