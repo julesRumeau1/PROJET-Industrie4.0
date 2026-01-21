@@ -39,6 +39,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.960631, 0, 4.1544647)
 [node name="old-heater" parent="." instance=ExtResource("3_r3fl7")]
 transform = Transform3D(-1.3113418e-08, 0, -0.30000004, 0, 0.29999998, 0, 0.30000004, 0, -1.3113418e-08, 9.424698, 0, -0.41763496)
 script = ExtResource("4_jka67")
+mqtt_topic_cmd = null
+mqtt_topic_state = null
 
 [node name="OmniLight3D" type="OmniLight3D" parent="old-heater"]
 transform = Transform3D(3.3333333, 0, 0, 0, 3.3333335, 0, 0, 0, 3.3333333, -0.41386944, 4.9171276, 0)

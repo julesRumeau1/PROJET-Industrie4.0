@@ -2,8 +2,8 @@ extends Node3D
 
 # --- Variables exportées ---
 @export var light_node : OmniLight3D  # Référence à la lumière du radiateur
-@export var mqtt_topic := "home/appart/cmd"  # Topic MQTT à écouter
-
+@export var mqtt_topic_cmd := "home/appart/cmd"  # Topic MQTT à écouter
+@export var mqtt_topic_state := "home/appart/state"  # Topic MQTT à écouter
 # --- Etat de la lumière ---
 var is_on := true
 
@@ -35,31 +35,35 @@ func _ready():
 func _on_mqtt_connected():
 	print("✅ Heater Connecté au broker MQTT")
 	mqtt_connected = true
-	MQTT_instance.subscribe(mqtt_topic)
-	print("Souscrit au topic:", mqtt_topic)
+	MQTT_instance.subscribe(mqtt_topic_state)
+	print("Souscrit au topic:", mqtt_topic_cmd)
 
 func _on_mqtt_failed():
 	print("❌ Échec de connexion au broker MQTT")
 
-func _on_mqtt_message(topic, message):
-	if topic != mqtt_topic:
-		return  # Ignorer les autres topics
-	
-	# Convertir le message en booléen
-	# On accepte "1"/"on" comme allumé, "0"/"off" comme éteint
-	var msg_lower = message.to_lower()
-	if msg_lower == "1" or msg_lower == "on":
-		is_on = true
-	elif msg_lower == "0" or msg_lower == "off":
-		is_on = false
-	else:
-		print("Message MQTT invalide:", message)
+func _on_mqtt_message(topic: String, message: String) -> void:
+	if topic != mqtt_topic_state:
 		return
 
-	# Appliquer l'état à la lumière
+	print("📩 MQTT state:", message)
+
+	# Recherche ultra simple
+	if message.find('"heater":1') != -1:
+		is_on = true
+		print("Open")
+	elif message.find('"heater":0') != -1:
+		is_on = false
+		print("Close")
+		
+	else:
+		print("❌ heater non trouvé")
+		return
+
 	if light_node:
 		light_node.visible = is_on
-		print("💡 Lumière radiateur :", is_on)
+		print("💡 Chauffage :", is_on)
+
+
 
 # --- Méthode pour toggle manuel si nécessaire ---
 func toggle_heater():
@@ -69,7 +73,7 @@ func toggle_heater():
 	if MQTT_instance == null or not mqtt_connected:
 		return
 	var payload = JSON.stringify({"heater": is_on})
-	MQTT_instance.publish(mqtt_topic, payload, true)
+	MQTT_instance.publish(mqtt_topic_cmd, payload, true)
 	print("📤 MQTT state:", payload)
 
 

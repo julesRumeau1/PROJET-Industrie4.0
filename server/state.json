@@ -4,8 +4,198 @@
   "home/window/cmd": {
     "open": true
   },
-  "home/appart/cmd": {
-    "window": true,
-    "ts": 1767709469.7247493
-  }
+  "home/appart/cmd": [
+    {
+      "heater": true,
+      "ts": 1768985159.37797
+    }
+  ],
+  "home/appart/state": [
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.17,
+      "ts": 1768984875.5359797
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.16,
+      "ts": 1768984885.570793
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.15,
+      "ts": 1768984895.6074054
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.14,
+      "ts": 1768984905.6562424
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.13,
+      "ts": 1768984915.733439
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.13,
+      "ts": 1768984925.5924842
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.12,
+      "ts": 1768984935.5463128
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.11,
+      "ts": 1768984945.5865219
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.1,
+      "ts": 1768984955.5910528
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.1,
+      "ts": 1768984965.534324
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.08,
+      "ts": 1768984975.6024358
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.08,
+      "ts": 1768984983.036
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.09,
+      "ts": 1768984985.5611231
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.09,
+      "ts": 1768984995.6834302
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.09,
+      "ts": 1768985005.5701165
+    },
+    {
+      "heater": 1,
+      "window": 0,
+      "temperature": 23.08,
+      "ts": 1768985015.581599
+    },
+    {
+      "heater": 1,
+      "window": 0,
+      "temperature": 23.08,
+      "ts": 1768985025.600998
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.08,
+      "ts": 1768985030.6204247
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.07,
+      "ts": 1768985035.5797474
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.08,
+      "ts": 1768985045.555065
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.08,
+      "ts": 1768985055.7777784
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.07,
+      "ts": 1768985065.5849118
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.07,
+      "ts": 1768985075.5629678
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.07,
+      "ts": 1768985085.651163
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.06,
+      "ts": 1768985095.5673096
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.07,
+      "ts": 1768985105.6518235
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.06,
+      "ts": 1768985115.5384746
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.06,
+      "ts": 1768985125.5759618
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.06,
+      "ts": 1768985135.73484
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.06,
+      "ts": 1768985145.7233338
+    },
+    {
+      "heater": 0,
+      "window": 0,
+      "temperature": 23.06,
+      "ts": 1768985155.5908322
+    }
+  ]
 }

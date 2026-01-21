@@ -1,0 +1,110 @@
+[
+  {
+    "rain_mm": 0.0,
+    "precipitation": 0.0,
+    "snow_mm": 0.0,
+    "clouds": 97,
+    "wind": 13.5,
+    "temp": 8.0,
+    "ts": 1768985429
+  },
+  {
+    "rain_mm": 0.0,
+    "precipitation": 0.0,
+    "snow_mm": 0.0,
+    "clouds": 98,
+    "wind": 23.9,
+    "temp": 6.9,
+    "ts": 1768985591
+  },
+  {
+    "rain_mm": 0.0,
+    "precipitation": 0.0,
+    "snow_mm": 0.0,
+    "clouds": 97,
+    "wind": 25.2,
+    "temp": 7.0,
+    "ts": 1768986192
+  },
+  {
+    "rain_mm": 0.0,
+    "precipitation": 0.0,
+    "snow_mm": 0.0,
+    "clouds": 97,
+    "wind": 25.2,
+    "temp": 7.0,
+    "ts": 1768986420
+  },
+  {
+    "rain_mm": 0.0,
+    "precipitation": 0.0,
+    "snow_mm": 0.0,
+    "clouds": 97,
+    "wind": 28.7,
+    "temp": 7.5,
+    "ts": 1768988927
+  },
+  {
+    "rain_mm": 0.0,
+    "precipitation": 0.0,
+    "snow_mm": 0.0,
+    "clouds": 97,
+    "wind": 28.7,
+    "temp": 7.5,
+    "ts": 1768988963
+  },
+  {
+    "rain_mm": 0.0,
+    "precipitation": 0.0,
+    "snow_mm": 0.0,
+    "clouds": 97,
+    "wind": 28.7,
+    "temp": 7.5,
+    "ts": 1768988974
+  },
+  {
+    "rain_mm": 0.0,
+    "precipitation": 0.0,
+    "snow_mm": 0.0,
+    "clouds": 97,
+    "wind": 28.7,
+    "temp": 7.5,
+    "ts": 1768989054
+  },
+  {
+    "rain_mm": 0.0,
+    "precipitation": 0.0,
+    "snow_mm": 0.0,
+    "clouds": 97,
+    "wind": 28.7,
+    "temp": 7.5,
+    "ts": 1768989079
+  },
+  {
+    "rain_mm": 0.0,
+    "precipitation": 0.0,
+    "snow_mm": 0.0,
+    "clouds": 97,
+    "wind": 28.7,
+    "temp": 7.5,
+    "ts": 1768989132
+  },
+  {
+    "rain_mm": 0.0,
+    "precipitation": 0.0,
+    "snow_mm": 0.0,
+    "clouds": 96,
+    "wind": 29.2,
+    "temp": 7.6,
+    "ts": 1768989732
+  },
+  {
+    "rain_mm": 0.0,
+    "precipitation": 0.0,
+    "snow_mm": 0.0,
+    "clouds": 96,
+    "wind": 29.2,
+    "temp": 7.6,
+    "ts": 1768990333
+  }
+]
