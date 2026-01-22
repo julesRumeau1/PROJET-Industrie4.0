@@ -29,7 +29,7 @@ func _ready():
 	MQTT_instance.received_message.connect(_on_mqtt_message)
 
 	# Connexion au broker MQTT
-	MQTT_instance.connect_to_broker("tcp://test.mosquitto.org:1883/")
+	MQTT_instance.connect_to_broker("tcp://10.45.195.118:1883/")
 
 # --- Signaux MQTT ---
 func _on_mqtt_connected():
@@ -46,12 +46,12 @@ func _on_mqtt_message(topic: String, message: String) -> void:
 		return
 
 	print("📩 MQTT state:", message)
-
+	var parsed_msg = JSON.parse_string(message)
 	# Recherche ultra simple
-	if message.find('"heater":1') != -1:
+	if parsed_msg['heater'] == 1:
 		is_on = true
 		print("Open")
-	elif message.find('"heater":0') != -1:
+	elif parsed_msg['heater'] == 0:
 		is_on = false
 		print("Close")
 		

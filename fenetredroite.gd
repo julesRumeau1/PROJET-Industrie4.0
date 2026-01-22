@@ -18,7 +18,7 @@ func _ready():
 	MQTT_instance.broker_connection_failed.connect(_on_mqtt_failed)
 	MQTT_instance.received_message.connect(_on_mqtt_message)
 
-	MQTT_instance.connect_to_broker("tcp://test.mosquitto.org:1883/")
+	MQTT_instance.connect_to_broker("tcp://10.45.195.118:1883/")
 
 func _on_mqtt_connected():
 	print("✅ Fenêtre connectée au MQTT")
