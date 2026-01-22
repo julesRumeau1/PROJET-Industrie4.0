@@ -14,11 +14,12 @@
 #define SERVO_CLOSE 0
 #define SDA_PIN 18
 #define SCL_PIN 19
-#define SENSOR_INTERVAL 10000  // 10 secondes
+#define BUTTON_PIN 9
+#define SENSOR_INTERVAL 10000  // 10 secoandes
 
 const char* ssid = "OnePlus NordCE 5G";
 const char* password = "caca1234";
-const char* mqtt_server = "test.mosquitto.org";
+const char* mqtt_server = "10.45.195.118";
 const char* TOPIC_CMD   = "home/appart/cmd";
 const char* TOPIC_STATE = "home/appart/state";
 
@@ -117,6 +118,18 @@ void publishState() {
   char buffer[128];
   serializeJson(doc, buffer);
   client.publish(TOPIC_STATE, buffer);
+
+  // Cmd minimal pour Godot
+  StaticJsonDocument<64> cmdDoc;
+  cmdDoc["heater"] = heaterState ? 1 : 0;
+  char cmdBuffer[64];
+  serializeJson(cmdDoc, cmdBuffer);
+  client.publish(TOPIC_CMD, cmdBuffer, true);
+
+
+  Serial.print("MQTT cmd envoyé : ");
+  Serial.println(cmdBuffer);
+
   Serial.print("MQTT state envoyé : ");
   Serial.println(buffer);
 }
@@ -129,6 +142,8 @@ void setup() {
   pinMode(LED_R, OUTPUT);
   pinMode(LED_G, OUTPUT);
   pinMode(LED_B, OUTPUT);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+
 
   servo.attach(SERVO_PIN);
   servo.write(SERVO_CLOSE);
@@ -148,12 +163,42 @@ void setup() {
   client.setCallback(mqttCallback);
 }
 
+unsigned long lastDebug = 0;  // variable globale
+
+void handleButtons() {
+    static bool lastButtonState = HIGH;  // état précédent du bouton
+    unsigned long now = millis();
+
+    // Print debug toutes les 1000 ms (1 sec)
+    static unsigned long lastDebug = 0;
+    if (now - lastDebug >= 1000) {
+        lastDebug = now;
+        Serial.print("BUTTON: "); Serial.println(digitalRead(BUTTON_PIN));
+    }
+
+    bool currentState = digitalRead(BUTTON_PIN);
+
+    // Détection front descendant (appui sur le bouton)
+    if (lastButtonState == HIGH && currentState == LOW) {
+        heaterState = !heaterState;  // inverse l'état
+        Serial.println(heaterState ? "Chauffage ALLUME (bouton)" : "Chauffage ETEINT (bouton)");
+        publishState();   // envoie MQTT
+    }
+
+    lastButtonState = currentState;
+}
+
+
+
+
+
 // ===== LOOP =====
 void loop() {
   if (!client.connected()) mqttReconnect();
   client.loop();
 
   listenMqtt();
+  handleButtons();
   updateLED();
   updateServo();
 

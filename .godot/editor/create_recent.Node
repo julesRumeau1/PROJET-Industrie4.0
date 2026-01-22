@@ -1,12 +1,15 @@
+<<<<<<< Updated upstream
 ColorRect
 CanvasLayer
 Node
+=======
+TextEdit
+>>>>>>> Stashed changes
 CollisionShape3D
 StaticBody3D
 Node3D
 OmniLight3D
 SpotLight3D
-TextEdit
 LineEdit
 Button
 WorldEnvironment
