@@ -106,5 +106,41 @@
     "wind": 29.2,
     "temp": 7.6,
     "ts": 1768990333
+  },
+  {
+    "rain_mm": 0.0,
+    "precipitation": 0.0,
+    "snow_mm": 0.0,
+    "clouds": 100,
+    "wind": 7.3,
+    "temp": 5.3,
+    "ts": 1769075219
+  },
+  {
+    "rain_mm": 0.0,
+    "precipitation": 0.0,
+    "snow_mm": 0.0,
+    "clouds": 100,
+    "wind": 7.3,
+    "temp": 5.3,
+    "ts": 1769075334
+  },
+  {
+    "rain_mm": 0.0,
+    "precipitation": 0.0,
+    "snow_mm": 0.0,
+    "clouds": 100,
+    "wind": 7.3,
+    "temp": 5.3,
+    "ts": 1769075494
+  },
+  {
+    "rain_mm": 0.0,
+    "precipitation": 0.0,
+    "snow_mm": 0.0,
+    "clouds": 100,
+    "wind": 7.3,
+    "temp": 5.3,
+    "ts": 1769075532
   }
 ]

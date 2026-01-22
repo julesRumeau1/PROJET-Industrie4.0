@@ -8,7 +8,7 @@ import requests
 # ====== CONFIG ======
 MAX_HISTORY = 1000
 
-MQTT_BROKER = "test.mosquitto.org"
+MQTT_BROKER = "10.45.195.118"
 MQTT_PORT = 1883
 
 TOPICS = [
