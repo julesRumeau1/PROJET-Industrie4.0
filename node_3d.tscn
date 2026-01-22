@@ -73,6 +73,10 @@ transform = Transform3D(-5.6824803e-08, 0, -1.3, 0, 1.3, 0, 1.3, 0, -5.6824803e-
 [node name="low-poly-single-bed" parent="." instance=ExtResource("8_jsk3o")]
 transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 10.510395, -0.009379983, 8.070839)
 
+[node name="TextEdit" type="TextEdit" parent="."]
+offset_right = 404.0
+offset_bottom = 64.0
+
 [connection signal="input_event" from="old-heater/StaticBody3D" to="old-heater" method="_on_static_body_3d_input_event"]
 [connection signal="input_event" from="fenetre/fenetregauche/StaticBody3D" to="fenetre/fenetredroite" method="_on_static_body_3d_input_event"]
 [connection signal="input_event" from="fenetre/fenetregauche/StaticBody3D" to="fenetre/fenetregauche" method="_on_static_body_3d_input_event"]
