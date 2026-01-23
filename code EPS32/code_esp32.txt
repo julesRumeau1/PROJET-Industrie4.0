@@ -14,8 +14,10 @@
 #define SERVO_CLOSE 0        // Position fermée du servo
 #define SDA_PIN 18           // Pin SDA pour I2C
 #define SCL_PIN 19           // Pin SCL pour I2C
-#define BUTTON_PIN 9         // Pin bouton physique
+#define BUTTON_PIN 10       // Pin bouton physique
 #define SENSOR_INTERVAL 10000  // Intervalle lecture température (10 secondes)
+#define TEMP_MIN  -10.0   // température minimale
+#define TEMP_MAX   50.0   // température maximale
 
 const char* ssid = "OnePlus NordCE 5G";      // Nom du réseau Wi-Fi
 const char* password = "caca1234";          // Mot de passe Wi-Fi
@@ -106,11 +108,19 @@ void updateServo() {
 // ===== TEMPERATURE =====
 // Lit la température depuis le capteur BME280
 void readTemperature() {
-  float temp = bme.readTemperature();               // Lecture température
-  if (!isnan(temp)) temperature = temp;             // Vérifie si lecture valide
-  Serial.print("Température = ");
-  Serial.print(temperature);
-  Serial.println(" °C");
+  float temp = bme.readTemperature();   // Lecture température
+
+  // Vérifie si la valeur est valide et réaliste
+  if (!isnan(temp) && temp >= TEMP_MIN && temp <= TEMP_MAX) {
+    temperature = temp;                 // Mise à jour seulement si cohérente
+    Serial.print("Température valide = ");
+    Serial.print(temperature);
+    Serial.println(" °C");
+  } else {
+    // Valeur incohérente ignorée
+    Serial.print("Température incohérente ignorée : ");
+    Serial.println(temp);
+  }
 }
 
 // ===== PUBLISH STATE =====
