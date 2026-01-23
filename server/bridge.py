@@ -11,26 +11,12 @@ MAX_HISTORY = 1000
 MQTT_BROKER = "10.45.195.118"
 MQTT_PORT = 1883
 
-TOPICS = [
-    "home/appart/cmd",
-    "home/appart/state"
-]
-
 WEATHER_TOPIC = "weather/rodez"
 WEATHER_INTERVAL = 600  # 10 minutes
 
 STATE_FILE = "state.json"
 WEATHER_FILE = "weather_history.json"
 SAVE_INTERVAL = 5
-
-LAT, LON = 44.33, 2.56
-
-HEATER_CMD_TOPIC = "home/appart/cmd"
-
-TEMP_ON = 14
-TEMP_OFF = 20.0
-
-
 
 # ====================
 
@@ -77,11 +63,11 @@ def auto_save():
             save_json_file(WEATHER_FILE, weather_history)
 
 # ------------------ Météo (Open-Meteo) ------------------
-def fetch_weather():
+def fetch_weather(lat, lon):
     url = "https://api.open-meteo.com/v1/forecast"
     params = {
-        "latitude": LAT,
-        "longitude": LON,
+        "latitude": lat,
+        "longitude": lon,
         "current": [
             "precipitation",
             "rain",
@@ -106,24 +92,39 @@ def fetch_weather():
         "ts": int(time.time())
     }
 
-def heater_control(weather):
+def predict_temp(Tin, Text, alpha=0.05):
+    return Tin + alpha * (Text - Tin)
+
+def predict_in_one_hour(Tin, Text, alpha=0.05, step_minutes=10):
+    steps = int(60 / step_minutes)
+    T = Tin
+
+    for _ in range(steps):
+        T = predict_temp(T, Text, alpha)
+
+    return T
+
+def heater_control(weather, temp_on, temp_off):
+    topic = "home/appart/cmd"
     heater_on = 0
     temp = weather.get("temp")
     if temp is None:
         return
+    local = state.get("home/appart/state")[0].get("temperature")
+    predicted_temp = predict_in_one_hour(temp, local)
 
     # Décision avec hystérésis
-    if temp <= TEMP_ON:
+    if predicted_temp <= temp_on:
         heater_on = True
 
-    elif temp >= TEMP_OFF:
+    elif predicted_temp >= temp_off:
         heater_on = False
 
     # Envoi MQTT (si connecté)
     if mqtt_connected:
         payload = json.dumps({"heater": heater_on})
         mqtt_client.publish(
-            HEATER_CMD_TOPIC,
+            topic,
             payload,
             qos=1,
             retain=True
@@ -140,8 +141,8 @@ def weather_publisher():
 
     while True:
         try:
-            payload = fetch_weather()
-            heater_control(payload)
+            payload = fetch_weather(44.33, 2.56)
+            heater_control(payload, 14, 20)
             # Sauvegarde météo TOUJOURS
             with lock:
                 weather_history.append(payload)
@@ -173,10 +174,14 @@ def init_mqtt():
     mqtt_client = mqtt.Client()
 
     def on_connect(client, userdata, flags, rc):
+        topics = [
+            "home/appart/cmd",
+            "home/appart/state"
+        ]
         global mqtt_connected
         mqtt_connected = True
         print("MQTT connected:", rc)
-        for t in TOPICS:
+        for t in topics:
             client.subscribe(t, qos=1)
             print("Subscribed to", t)
 

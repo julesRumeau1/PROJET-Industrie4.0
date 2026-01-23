@@ -1,0 +1,16 @@
+{
+  "home/appart/cmd": [
+    {
+      "heater": 0,
+      "ts": 1769085167.4485893
+    }
+  ],
+  "home/appart/state": [
+    {
+      "heater": 1,
+      "window": 0,
+      "temperature": 22.78,
+      "ts": 1769085174.9802012
+    }
+  ]
+}
